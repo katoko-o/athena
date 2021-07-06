@@ -1,0 +1,123 @@
+require:
+  - rubocop-rails
+  - rubocop-performance
+
+Rails:
+  Enabled: true
+
+# 日本語のコメントを許可する
+Style/AsciiComments:
+  Enabled: false
+
+# end と同一行のコメントを許可する
+Style/CommentedKeyword:
+  Enabled: false
+
+# メソッドの引数を複数行に書く場合はインデントで位置合わせする
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+# "rails g annotate:install" による自動生成ファイルのため除外
+Layout/HashAlignment:
+  Exclude:
+    - lib/tasks/auto_annotate_models.rake
+
+# コントローラクラスのクラス、自動生成に関するコメントは不要
+Style/Documentation:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - Guardfile
+    # "rails g annotate:install" による自動生成ファイルのため
+    - lib/tasks/auto_annotate_models.rake
+    # spec ファイルは block の中が長くなるため
+    - spec/**/*_spec.rb
+    # factory ファイルは block の中が長くなるため
+    - spec/factories/*.rb
+    # メニューの定義でどうしても長くなるため、無効にしている
+    - config/initializers/active_admin.rb
+    # ActiveAdmin の設定は長くなりがちなので除外
+    - app/admin/*.rb
+    # ルーティングは絶対長くなるため除外
+    - config/routes.rb
+
+# 一括でメソッド内に書いたほうがわかりやすいケースがあるため、
+# MethodLength は 10 から 30 程度に変更する
+Metrics/MethodLength:
+  Exclude:
+    # Service のメソッドは長くなりがちなので除外
+    - app/services/*.rb
+    # Ability の定義は長くなりがちなので除外
+    - app/models/ability.rb
+    # hash 作成や引数の改行で長くなったため除外
+    - app/controllers/all_operation_controller.rb
+  Max: 30
+
+# 一括でメソッド内に書いたほうがわかりやすいケースがあるため、
+# AbcSize は 30 から 50 程度に変更する
+Metrics/AbcSize:
+  Enabled: true
+  Max: 50
+
+# nautilus の設定に合わせる
+Metrics/CyclomaticComplexity:
+  Max: 15
+
+# nautilus の設定に合わせる
+Metrics/PerceivedComplexity:
+  Max: 15
+
+# Exclude array については override ではなく merge するという宣言
+# AllCops の指定をするために必要。
+# https://github.com/rubocop-hq/rubocop/blob/master/manual/configuration.md#merging-arrays-using-inherit_mode
+inherit_mode:
+  merge:
+    - Exclude
+
+# db/schema.rb, db/migrate, misc/tachikoma 配下のファイルはチェック対象にする
+AllCops:
+  NewCops: enable
+  Exclude:
+    - db/schema.rb
+    - 'db/migrate/*.rb'
+    - misc/tachikoma/**
+
+Naming/MethodParameterName:
+  AllowedNames:
+    # error の e を許容
+    - e
+
+Rails/FilePath:
+  EnforcedStyle: arguments
+
+Rails/RakeEnvironment:
+  Exclude:
+    - lib/tasks/auto_annotate_models.rake
+
+# 120文字まで許容する
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    # コメントが長くなりがち
+    - Gemfile
+    # secret_key 等の指定が長くなる
+    - config/initializers/devise.rb
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+inherit_from: .rubocop_todo.yml
+
+
+
+
